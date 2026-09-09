@@ -20,7 +20,9 @@ export default async function Home() {
       </section>
 
       {result.ok ? (
-        <RecommendationsView recommendations={result.data} />
+        <RecommendationsView recommendations={result.data.filter(
+          (item) => !/^테스트 전시\s*\d*$/u.test(item.exhibition_title.trim()),
+        )} />
       ) : (
         <section className="state-card" role="alert">
           <span className="state-card__label">데이터를 불러오지 못했습니다</span>
