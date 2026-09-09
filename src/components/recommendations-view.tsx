@@ -1,12 +1,23 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import type { ExhibitionRecommendation } from "@/lib/recommendations";
 
 type Props = { recommendations: ExhibitionRecommendation[] };
 type View = "home" | "archive" | "calendar";
 
 const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+const featuredImages: Record<string, { src: string; alt: string }> = {
+  "이것은 개념미술이 (아니)다": {
+    src: "/exhibitions/conceptual-art.gif",
+    alt: "이것은 개념미술이 (아니)다 공식 전시 포스터",
+  },
+  "올해의 작가상 2026": {
+    src: "/exhibitions/korea-artist-prize-2026.png",
+    alt: "올해의 작가상 2026 공식 전시 포스터",
+  },
+};
 
 function parseDate(value: string, endOfDay = false) {
   return new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}+09:00`);
@@ -30,8 +41,15 @@ function getStatus(item: ExhibitionRecommendation) {
 
 function ExhibitionCard({ item, featured = false }: { item: ExhibitionRecommendation; featured?: boolean }) {
   const status = getStatus(item);
+  const featuredImage = featured ? featuredImages[item.exhibition_title] : undefined;
   return (
     <article className={`exhibition-card${featured ? " exhibition-card--featured" : ""}`}>
+      {featuredImage && (
+        <figure className="exhibition-card__visual">
+          <Image src={featuredImage.src} alt={featuredImage.alt} width={800} height={800} sizes="(max-width: 760px) 100vw, 50vw" />
+          <figcaption>Official exhibition image · MMCA</figcaption>
+        </figure>
+      )}
       <div className="exhibition-card__topline">
         <span className="rank">0{item.recommendation_rank}</span>
         <span className={`status status--${status.replace(" ", "-")}`}>{status}</span>
