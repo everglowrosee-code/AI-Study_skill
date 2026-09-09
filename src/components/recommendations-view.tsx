@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import type { ExhibitionRecommendation } from "@/lib/recommendations";
 
 type Props = { recommendations: ExhibitionRecommendation[] };
@@ -45,7 +46,10 @@ function ExhibitionCard({ item, featured = false }: { item: ExhibitionRecommenda
   return (
     <article className={`exhibition-card${featured ? " exhibition-card--featured" : ""}`}>
       {featuredImage && (
-        <figure className="exhibition-card__visual">
+        <figure
+          className="exhibition-card__visual"
+          style={{ "--poster-image": `url("${featuredImage.src}")` } as CSSProperties}
+        >
           <Image src={featuredImage.src} alt={featuredImage.alt} width={800} height={800} sizes="(max-width: 760px) 100vw, 50vw" />
           <figcaption>Official exhibition image · MMCA</figcaption>
         </figure>
