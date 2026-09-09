@@ -123,27 +123,39 @@ function CalendarView({ recommendations }: { recommendations: ExhibitionRecommen
 export function RecommendationsView({ recommendations }: Props) {
   const [view, setView] = useState<View>("home");
   const [query, setQuery] = useState("");
+  const visibleRecommendations = useMemo(
+    () => recommendations.filter((item) => !/^테스트 전시\s*\d*$/u.test(item.exhibition_title.trim())),
+    [recommendations],
+  );
   const batches = useMemo(() => {
     const grouped = new Map<string, ExhibitionRecommendation[]>();
-    for (const item of recommendations) {
+    for (const item of visibleRecommendations) {
       const batch = grouped.get(item.batch_id) ?? [];
       batch.push(item);
       grouped.set(item.batch_id, batch);
     }
     return [...grouped.entries()];
-  }, [recommendations]);
+  }, [visibleRecommendations]);
 
   const [latestBatch, ...pastBatches] = batches;
-  const pastRecommendations = pastBatches.flatMap(([, items]) => items);
+  const pastRecommendations = useMemo(() => {
+    const seen = new Set<string>();
+    return pastBatches.flatMap(([, items]) => items).filter((item) => {
+      const key = `${item.exhibition_title.trim().toLocaleLowerCase("ko")}|${item.venue_name.trim().toLocaleLowerCase("ko")}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, 10);
+  }, [pastBatches]);
   const uniqueRecommendations = useMemo(() => {
     const seen = new Set<string>();
-    return recommendations.filter((item) => {
+    return visibleRecommendations.filter((item) => {
       const key = `${item.exhibition_title}|${item.venue_name}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
-  }, [recommendations]);
+  }, [visibleRecommendations]);
   const normalizedQuery = query.trim().toLocaleLowerCase("ko");
   const filteredPast = pastRecommendations.filter((item) =>
     [item.exhibition_title, item.venue_name, item.recommendation_reason]

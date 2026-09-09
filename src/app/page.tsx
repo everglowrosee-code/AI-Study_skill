@@ -12,7 +12,7 @@ export default async function Home() {
         <div className="hero__eyebrow">
           <span className="hero__dot" /> 서울 전시 큐레이션
         </div>
-        <h1>오래 바라볼<br /><em>두 개의 전시</em></h1>
+        <h1><span>오래 바라볼</span><em>두개의 전시</em></h1>
         <p className="hero__lede">
           작품성과 미술사적 맥락을 중심으로 고른 서울의 전시를 기록합니다.
           화려한 체험보다 오래 남는 작품을 먼저 소개합니다.
