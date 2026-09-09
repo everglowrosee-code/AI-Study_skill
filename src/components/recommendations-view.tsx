@@ -62,6 +62,17 @@ function ExhibitionCard({ item, featured = false }: { item: ExhibitionRecommenda
         <p className="venue">{item.venue_name}</p>
         <h2>{item.exhibition_title}</h2>
         <p className="date-range">{formatDate(item.start_date)} — {formatDate(item.end_date)}</p>
+        <a
+          className="map-link"
+          href={`https://map.naver.com/p/search/${encodeURIComponent(item.venue_name)}`}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${item.venue_name} 네이버지도에서 보기`}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12A7 7 0 1 0 5 9c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          네이버지도에서 보기
+          <span aria-hidden="true">↗</span>
+        </a>
         <p className="reason">{item.recommendation_reason}</p>
       </div>
       <div className="exhibition-card__details">
