@@ -1,6 +1,6 @@
 ---
 name: seoul-art-exhibitions
-description: Recommend two verified current or upcoming art exhibitions in Korea, especially Seoul, tailored to a reader who favors Impressionism and substantive fine art over Instagram-oriented immersive shows. Use when the user sends "[미술전시]", asks for Korean or Seoul exhibition recommendations, or wants current exhibition dates or early-bird ticket opportunities.
+description: Recommend and save two verified current or upcoming art exhibitions in Korea, especially Seoul, tailored to a reader who favors Impressionism and substantive fine art over Instagram-oriented immersive shows. Use when the user sends "[미술전시]", asks for Korean or Seoul exhibition recommendations, or wants current exhibition dates or early-bird ticket opportunities.
 ---
 
 # Seoul Art Exhibitions
@@ -12,6 +12,8 @@ Curate exactly two worthwhile exhibitions that the user can currently visit or r
 Browse on every invocation. Never answer from memory alone, because dates, closures, ticket inventory, and early-bird sales change.
 
 Build a small candidate pool from current and announced exhibitions. Search broadly enough to compare institutions, galleries, art fairs, and credible independent venues rather than returning the first two results.
+
+Before selecting finalists, call `list_recent_exhibition_recommendations` exactly once. Exclude every exhibition already present in the returned recommendation history, not only the immediately preceding pair. On every repeated request, present two exhibitions that have not previously been recommended. Reuse a prior exhibition only when the user explicitly asks for it again or when fewer than two verified worthwhile alternatives exist; in the latter case, explain the exhaustion before reusing anything.
 
 For each finalist, verify all of the following:
 
@@ -49,3 +51,9 @@ Respond in Korean and lead with a one-sentence verdict. Present only two numbere
 - **확인 출처:** direct official exhibition page and any corroborating source used
 
 End with a compact `둘 중 하나만 고르면` choice. Use absolute dates, not only relative expressions such as “이번 주” or “곧 종료.” When `[미술전시]` is the entire prompt, do not ask follow-up questions; apply this saved taste profile and complete the current search.
+
+## Save and publish
+
+After both recommendations are final, call `save_exhibition_recommendations` exactly once with the same two records in ranked order. This database write is required on every invocation, including a bare `미술전시` request. The local exhibition webpage reads this database and displays the newly saved batch automatically.
+
+Do not claim that the recommendations were saved or published unless the tool confirms success. If the save tool is unavailable or returns an error, still provide the recommendations, explicitly report that the database and webpage were not updated, and include the failure reason when available.

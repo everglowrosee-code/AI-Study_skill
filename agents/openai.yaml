@@ -1,4 +1,4 @@
 interface:
   display_name: "서울 미술전시 큐레이터"
-  short_description: "서울 중심 최신 미술전시 두 편을 취향 맞춤 추천"
-  default_prompt: "Use $seoul-art-exhibitions to recommend two current or upcoming art exhibitions in Seoul."
+  short_description: "서울 최신 미술전시 두 편을 추천하고 DB에 저장"
+  default_prompt: "Use $seoul-art-exhibitions to recommend two new current or upcoming art exhibitions in Seoul, save them to the database, and publish them to the local webpage."
